@@ -1,40 +1,44 @@
 var todaysDate = moment().format("lll");
 var button = $(".btn");
-var zipInput = $(".form-control").val;
+var cityInput = $(".form-control").val();
 var tempElement = document.querySelector(".temperature-value p");
 var descElement = document.querySelector(".temperature-description p");
 var locationElement = document.querySelector(".location p");
+var humidityEl = document.querySelector(".humidity");
+var windEl = document.querySelector(".wind-speed");
+var uvIndexEl = document.querySelector(".uv-index");
 var notificationElement = document.querySelector(".notification");
-var key = "4c2f8d8f735edeb060159e75322d57d5";
-var weather = {};
+var key = `963e1a0be2cb2dfab2cc74bc293b5ff4`;
+var weather = [];
 var KELVIN = 273;
-var searchZip = $("zipInput").val;
 
 $("#time").text(todaysDate);
 
 weather.temperature = {
   unit: "celsius",
 };
-// console.log(zipInput)
+// console.log(cityInput)
 
-$(button).on("click", function () {
-  zipInput = $(".form-control").val();
+$(button).on("click", function (searchZip) {
+  cityInput = $(".form-control").val();
   event.preventDefault();
 
-  for (var i = 0; i < zipInput.length; i++)
-    if (zipInput < i) {
+  for (var i = 0; i < cityInput.length; i++)
+    if (cityInput < i) {
       alert("input a zip code please");
 
-      zipInput = $("<p>");
-      zipInput.text([i]);
+      cityInput = $("<p>");
+      cityInput.text([i]);
     }
 
-  localStorage.setItem("", zipInput);
+  localStorage.setItem("cities", cityInput);
+  getWeather(cityInput);
 });
 
-function getWeather() {
-  var proxy = "https://cors-anywhere.herokuapp.com/";
-  var api = `${proxy}https://api.openweathermap.org/data/2.5/weather?zip="  + zipInput + "appid="4c2f8d8f735edeb060159e75322d57d5"`;
+// http://api.openweathermap.org/data/2.5/weather?q=94040,US&APPID${}
+
+function getWeather(cityInput) {
+  var api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=${key}`;
 
   fetch(api)
     .then(function (response) {
@@ -42,27 +46,50 @@ function getWeather() {
       return data;
     })
     .then(function (data) {
-      weather.temperature.value = Math.floor(data.main.temp - KELVIN);
-      weather.description = data.weather[0].description;
-      weather.iconId = data.weather[0].icon;
-      weather.city = data.name;
-      weather.country = data.sys.country;
+      console.log(data)
+      for (var i = 0; i < data.list.length; i += 8) {
+        //make temp show
+        var temp = Math.floor(data.list[i].main.temp - KELVIN);
+        tempElement.textContent = `${temp}°`;
+        var descript = data.list[i].weather[0].main;
+        descElement.textContent = `${descript}`;
+        var humidity = data.list[0].main.humidity;
+        humidityEl.textContent = "Humidity " + `${humidity}`;
+        var windSpeed = data.list[0].wind.speed;
+        windEl.textContent = "WindSpeed " + `${windSpeed}` + "kmH";
+        var lattitude = data.city.coord.lat;
+        var longitude = data.city.coord.lon;
+      }
     })
-    .then(function () {
-      displayWeather();
-    });
+      var api = `http://api.openweathermap.org/data/2.5/uvi?appid=${key}&lat=${lattitude}&lon=${longitude}`;
+      
+      fetch(api).then(function (response) {
+        var data = response.json();
+        return data;
+      });
+      
+      .then(function (data) {
+        console.log(data)
+      
+        for (var i = 0; i < data.list.length; i += 8) {
+         var uvIndex = data.city.coord
+    
+  }
+
+
+   
 }
 
-function displayWeather() {
-    // iconElement.innerHTML = `<img src="/${weather.iconId}/>`;
-  tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
-  descElement.innerHTML = weather.description;
-  locationElement.innerHTML = `${weather.city}`;
+// function displayWeather() {
+//   // iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
+//   tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+//   descElement.innerHTML = weather.description;
+//   locationElement.innerHTML = `${weather.city}`;
 
-}
+// }
 // function setIcons(icon, iconId){
 //     var skycons = new skycons({color: "white"});
-//     var currentIcon = 
+//     var currentIcon =
 // }
 
 function celsiusToFahrenheit(temperature) {
@@ -84,5 +111,4 @@ tempElement.addEventListener("click", function () {
   }
 });
 
-getWeather();
 //var apiUrl = api.openweathermap.org/data/2.5/weather?zip={zip code},{country code}&appid={4c2f8d8f735edeb060159e75322d57d5}

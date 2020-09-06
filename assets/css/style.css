@@ -70,7 +70,10 @@ header p {
     text-align: center;
     font-size: 1.2em;
 } 
-.location p{
+.location p,
+.humidity p,
+.wind-speed p,
+.uv-index p {
     margin: 0;
     padding: 0;
     color: #293251;
