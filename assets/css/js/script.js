@@ -9,6 +9,8 @@ var windEl = document.querySelector(".wind-speed");
 var uvIndexEl = document.querySelector(".uv-index");
 var notificationElement = document.querySelector(".notification");
 var key = `963e1a0be2cb2dfab2cc74bc293b5ff4`;
+var key2 = `pk.eyJ1IjoiYnNzcGx5cjU1NSIsImEiOiJja2VycGJtanAxendtMzBxbXhvMGF3ZHpnIn0.1riw_U95VX0YO5rapNwgrg`;
+
 var weather = [];
 var KELVIN = 273;
 
@@ -19,7 +21,7 @@ weather.temperature = {
 };
 // console.log(cityInput)
 
-$(button).on("click", function (searchZip) {
+$(button).on("click", function () {
   cityInput = $(".form-control").val();
   event.preventDefault();
 
@@ -35,15 +37,20 @@ $(button).on("click", function (searchZip) {
   getWeather(cityInput);
 });
 
-// http://api.openweathermap.org/data/2.5/weather?q=94040,US&APPID${}
+
+// fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoiYnNzcGx5cjU1NSIsImEiOiJja2VycGJtanAxendtMzBxbXhvMGF3ZHpnIn0.1riw_U95VX0YO5rapNwgrg`)
+
 
 function getWeather(cityInput) {
-  var api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=${key}`;
+  // var api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=${key}`;
+
+  var api = `https://api.openweathermap.org/data/2.5/onecall?q=${cityInput}&appid=${key}`
 
   fetch(api)
     .then(function (response) {
       var data = response.json();
       return data;
+      console.log(data)
     })
     .then(function (data) {
       console.log(data)
@@ -61,24 +68,7 @@ function getWeather(cityInput) {
         var longitude = data.city.coord.lon;
       }
     })
-      var api = `http://api.openweathermap.org/data/2.5/uvi?appid=${key}&lat=${lattitude}&lon=${longitude}`;
-      
-      fetch(api).then(function (response) {
-        var data = response.json();
-        return data;
-      });
-      
-      .then(function (data) {
-        console.log(data)
-      
-        for (var i = 0; i < data.list.length; i += 8) {
-         var uvIndex = data.city.coord
-    
-  }
-
-
-   
-}
+  }      
 
 // function displayWeather() {
 //   // iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
