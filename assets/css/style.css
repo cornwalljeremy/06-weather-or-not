@@ -57,6 +57,7 @@ header p {
     cursor: pointer;
 }
 .temperature-value p:hover{
+    pointer-events: red;
     
 }
 .temperature-value span{

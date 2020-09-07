@@ -1,6 +1,7 @@
 var todaysDate = moment().format("lll");
 var button = $(".btn");
 var cityInput = $(".form-control").val();
+var iconEl = document.querySelector(".weather-icon");
 var tempElement = document.querySelector(".temperature-value p");
 var descElement = document.querySelector(".temperature-description p");
 var locationElement = document.querySelector(".location p");
@@ -24,6 +25,7 @@ weather.temperature = {
 $(button).on("click", function () {
   cityInput = $(".form-control").val();
   event.preventDefault();
+  
 
   for (var i = 0; i < cityInput.length; i++)
     if (cityInput < i) {
@@ -42,9 +44,9 @@ $(button).on("click", function () {
 
 
 function getWeather(cityInput) {
-  // var api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=${key}`;
+  var api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=${key}`;
 
-  var api = `https://api.openweathermap.org/data/2.5/onecall?q=${cityInput}&appid=${key}`
+  // var api = `https://api.openweathermap.org/data/2.5/onecall?q=${cityInput}&appid=${key}`
 
   fetch(api)
     .then(function (response) {
@@ -55,7 +57,8 @@ function getWeather(cityInput) {
     .then(function (data) {
       console.log(data)
       for (var i = 0; i < data.list.length; i += 8) {
-        //make temp show
+        var iconId = data.list[0].weather[0].icon
+        // iconEl.innerHTML = <img src="icons/${iconId}.png">;
         var temp = Math.floor(data.list[i].main.temp - KELVIN);
         tempElement.textContent = `${temp}°`;
         var descript = data.list[i].weather[0].main;
