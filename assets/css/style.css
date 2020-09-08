@@ -29,6 +29,13 @@
 body {
     background: linear-gradient(rgb(214, 230, 237), rgb(48, 62, 143));
 }
+/* body {
+    background: rgb(75, 116, 75);
+    background: rgb(191, 213, 114);
+    background: rgb(215, 170, 74);
+    background: rgb(228, 101, 87);
+    background: rgb(169, 89, 117);
+} */
 
 
 header p {
