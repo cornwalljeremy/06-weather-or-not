@@ -1,4 +1,5 @@
 var todaysDate = moment().format("lll");
+var backColor = document.querySelector("body")
 var button = $(".btn");
 var cityInput = $(".form-control").val();
 var iconEl = document.querySelector(".weather-icon");
@@ -62,17 +63,27 @@ function getWeather(cityInput) {
         weatherCard.classList.add("weather-container")
         var fiveDate = document.createElement("p")
         fiveDate.textContent = data.list[0].dt_txt.split(" ")[0]
+        
         var temp = Math.floor(data.list[i].main.temp - KELVIN );
         var mainTemp = document.createElement("p")
         mainTemp.setAttribute("class", "temperature-value")
-        mainTemp.textContent = `${temp}°`;
-        weatherCard.append(fiveDate, mainTemp)
+        mainTemp.textContent = `${temp}°C`;
+
+        var descript = data.list[i].weather[0].main;
+        var mainDescript = document.createElement("p")
+        mainDescript.setAttribute("class", "temperature-description");
+        mainDescript.textContent = `${descript}`;
+
+        var humidity = data.list[0].main.humidity;
+        var mainHumidity = document.createElement("p");
+        mainHumidity.setAttribute("class", "humidity")
+        mainHumidity.textContent = "Humidity " + `${humidity}`;
+
+        weatherCard.append(fiveDate, mainTemp, mainDescript)
         weatherEl.append(weatherCard)
 
-        // var descript = data.list[i].weather[0].main;
-        // descEl.textContent = `${descript}`;
-        // var humidity = data.list[0].main.humidity;
-        // humidityEl.textContent = "Humidity " + `${humidity}`;
+        
+       
         // var windSpeed = data.list[0].wind.speed;
         // windEl.textContent = "WindSpeed " + `${windSpeed}` + "kmH";
         var lattitude = data.city.coord.lat;
@@ -93,23 +104,44 @@ function getWeather(cityInput) {
     })
     .then(function (result){
       console.log(result)
-      // var iconId = data.list[0].weather[0].icon;
-      // iconEl.innerHTML = `<img src="icons/${iconId}.png">`;
+      var iconId = result.current.weather[0].icon;
+      iconEl.innerHTML = `<img src="icons/${iconId}.png">`;
       
       var temp = Math.floor(result.current.temp - KELVIN );
       weather.temperature.value = temp
-      
       tempEl.textContent = `${temp}°`;
-      // var descript = data.list[i].weather[0].main;
-      // descEl.textContent = `${descript}`;
-      // var humidity = data.list[0].main.humidity;
-      // humidityEl.textContent = "Humidity " + `${humidity}`;
-      // var windSpeed = data.list[0].wind.speed;
-      // windEl.textContent = "WindSpeed " + `${windSpeed}` + "kmH";
 
-      
+      var descript = result.current.weather[0].description;
+      descEl.textContent = `${descript}`;
+
+      var humidity = result.current.humidity;
+      humidityEl.textContent = "Humidity " + `${humidity}`;
+
+      var windSpeed = result.current.wind_speed;
+      windEl.textContent = "WindSpeed " + `${windSpeed}` + "kmH";
+
+      var uvInfo = result.current.uvi;
+      uvIndexEl.textContent = "UV Index " + `${uvInfo}`;
+      if(uvInfo <= 2){
+       backColor.style.backgroundColor = "green";
+        } else if(uvInfo <= 5){
+        backColor.style.backgroundColor = "yellow";
+        } else if (uvInfo <= 7) {
+          backColor.style.backgroundColor =  "orange";
+        } else if(uvInfo <= 10){
+            backColor.style.backgroundColor =  "red";
+        }else if(uvInfo >= 11){
+            backColor.style.backgroundColor =  "purple";
+          }
+        
+
     })
   }
+
+
+      
+  //   })
+  // }
 
   // var uvIndex = function(){
   //   for(var i = 0; uvIndex > ""; i++);
