@@ -19,14 +19,14 @@ var KELVIN = 273;
 
 $("#time").text(todaysDate);
 
-console.log(list);
+// console.log(list);
 
 $(button).on("click", function (event) {
   event.preventDefault();
   $("#weather-input").empty();
   cityInput = $(".form-control").val();
   $("form-control").empty();
-  console.log(cityInput);
+  // console.log(cityInput);
 
   if (cityInput === "") {
     alert("input a city please");
@@ -67,7 +67,7 @@ function getWeather(cityInput) {
       console.log(data);
     })
     .then(function (data) {
-      console.log(data);
+      // console.log(data);
       for (var i = 0; i < data.list.length; i += 8) {
         $(".large-name").text(data.city.name);
         var weatherCard = document.createElement("div");
@@ -112,7 +112,7 @@ function getWeather(cityInput) {
       console.log(data);
     })
     .then(function (result) {
-      console.log(result);
+      // console.log(result);
 
       var iconId = result.current.weather[0].icon;
       iconEl.innerHTML = `<img src="icons/${iconId}.png">`;
