@@ -10,36 +10,50 @@ var locationEl = document.querySelector(".location p");
 var humidityEl = document.querySelector(".humidity");
 var windEl = document.querySelector(".wind-speed");
 var uvIndexEl = document.querySelector(".uv-index");
-var list = JSON.parse(localStorage.getItem(cityInput))
-var key = `963e1a0be2cb2dfab2cc74bc293b5ff4`;
+var list = JSON.parse(localStorage.getItem("cities")) || [];
 
+var key = `963e1a0be2cb2dfab2cc74bc293b5ff4`;
 
 var weather = {};
 var KELVIN = 273;
 
 $("#time").text(todaysDate);
 
+console.log(list);
 
-
-// console.log(cityInput)
-
-$(button).on("click", function () {
+$(button).on("click", function (event) {
+  event.preventDefault();
+  $("#weather-input").empty();
   cityInput = $(".form-control").val();
   $("form-control").empty();
+  console.log(cityInput);
 
-  for (var i = 0; i < cityInput.length; i++)
-    if (cityInput < i) {
-      alert("input a city please");
+  if (cityInput === "") {
+    alert("input a city please");
+  } else {
+    list.push(cityInput);
+    localStorage.setItem("cities", JSON.stringify(list));
 
-      cityInput = $("<p>");
-      cityInput.text([i]);
-    }
-
-  localStorage.setItem("cities", cityInput);
-  getWeather(cityInput);
+    getWeather(cityInput);
+  }
 });
 
-
+$(document).ready(function () {
+  for (var i = 0; i < list.length; i++) {
+    // console.log(list[i]);
+    var test = $("<button/>", {
+      text: list[i],
+      value: list[i],
+      click: function () {
+        $("#weather-input").empty();
+        getWeather(this.value);
+      },
+      
+    });
+    
+    $(".recent-search").append(test);
+  }
+});
 
 function getWeather(cityInput) {
   var api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=${key}`;
@@ -55,12 +69,12 @@ function getWeather(cityInput) {
     .then(function (data) {
       console.log(data);
       for (var i = 0; i < data.list.length; i += 8) {
+        $(".large-name").text(data.city.name);
         var weatherCard = document.createElement("div");
         weatherCard.classList.add("weather-container");
+
         var fiveDate = document.createElement("p");
         fiveDate.textContent = data.list[i].dt_txt.split(" ")[0];
-        
-        
 
         var temp = Math.floor(data.list[i].main.temp - KELVIN);
         var mainTemp = document.createElement("p");
@@ -79,6 +93,7 @@ function getWeather(cityInput) {
 
         weatherCard.append(fiveDate, mainTemp, mainDescript, mainHumidity);
         weatherEl.append(weatherCard);
+        // console.log(weatherCard);
 
         // var windSpeed = data.list[0].wind.speed;
         // windEl.textContent = "WindSpeed " + `${windSpeed}` + "kmH";
@@ -98,6 +113,7 @@ function getWeather(cityInput) {
     })
     .then(function (result) {
       console.log(result);
+
       var iconId = result.current.weather[0].icon;
       iconEl.innerHTML = `<img src="icons/${iconId}.png">`;
 
@@ -129,22 +145,6 @@ function getWeather(cityInput) {
       }
     });
 }
-
-//   })
-// }
-
-// var uvIndex = function(){
-//   for(var i = 0; uvIndex > ""; i++);
-//     if(i > uvColor)
-// }
-
-// function displayWeather() {
-//   // iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
-//   tempEl.innerHTML = `${weather.temperature.value}°<span>C</span>`;
-//   descEl.innerHTML = weather.description;
-//   locationEl.innerHTML = `${weather.city}`;
-
-// }
 
 weather.temperature = {
   unit: "celsius",

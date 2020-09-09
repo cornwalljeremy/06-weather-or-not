@@ -22,21 +22,9 @@
     font-size: 35px;
 }
 #time {
-    color: var(--tertiary);
+    color: var(--dark);
     padding: 4%;
 } 
-
-/* body {
-    background: linear-gradient(rgb(214, 230, 237), rgb(48, 62, 143));
-} */
-/* body {
-    background: rgb(75, 116, 75);
-    background: rgb(191, 213, 114);
-    background: rgb(215, 170, 74);
-    background: rgb(228, 101, 87);
-    background: rgb(169, 89, 117);
-} */
-
 
 header p {
     font-weight: 700;
@@ -49,10 +37,11 @@ header p {
 
 .weather-container{
     border: 1px solid black;
-    padding: 40px;
-    margin: 50px 0;
+    padding: 20px;
+    /* margin: 20px 0; */
     justify-content: right;
     background-color: darkolivegreen;
+    font-size: 15px;
 }
 
 
